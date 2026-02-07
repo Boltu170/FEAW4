@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Statement Analysis - Interactive Learning</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+```
+    :root {
+        --bg-primary: #ffffff;
+        --text-primary: #000000;
+        --text-secondary: #4a4a4a;
+        --accent: #2563eb;
+        --accent-light: #dbeafe;
+        --border: #e5e7eb;
+        --success: #10b981;
+        --error: #ef4444;
+        --shadow: rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+        font-family: 'IBM Plex Sans', sans-serif;
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        line-height: 1.6;
+        overflow-x: hidden;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 60px 40px;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .slide {
+        display: none;
+        animation: slideIn 0.5s ease-out;
+    }
+
+    .slide.active {
+        display: block;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .slide-header {
+        margin-bottom: 40px;
+        border-bottom: 3px solid var(--text-primary);
+        padding-bottom: 20px;
+    }
+
+    .slide-number {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-secondary);
+        letter-spacing: 2px;
+        margin-bottom: 10px;
+    }
+
+    h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: 42px;
+        line-height: 1.2;
+        margin-bottom: 15px;
+    }
+
+    h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 28px;
+        margin: 30px 0 15px;
+        color: var(--text-primary);
+    }
+
+    h3 {
+        font-size: 20px;
+        font-weight: 600;
+        margin: 25px 0 12px;
+        color: var(--accent);
+    }
+
+    .concept-box {
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        border-left: 4px solid var(--accent);
+        padding: 25px;
+        margin: 25px 0;
+        border-radius: 8px;
+    }
+
+    .explanation {
+        background: var(--bg-primary);
+        border: 2px solid var(--border);
+        padding: 25px;
+        margin: 25px 0;
+        border-radius: 8px;
+        font-size: 17px;
+        line-height: 1.8;
+    }
+
+    .example-box {
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        border-left: 4px solid #f59e0b;
+        padding: 25px;
+        margin: 25px 0;
+        border-radius: 8px;
+    }
+
+    .example-box h3 {
+        color: #92400e;
+    }
+
+    .reference {
+        font-size: 13px;
+        color: var(--text-secondary);
+        font-style: italic;
+        margin-top: 10px;
+    }
+
+    .question-box {
+        background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+        border: 3px solid var(--accent);
+        padding: 30px;
+        margin: 30px 0;
+        border-radius: 12px;
+    }
+
+    .question-box h3 {
+        color: #1e40af;
+        margin-top: 0;
+    }
+
+    .mcq-option {
+        background: white;
+        border: 2px solid var(--border);
+        padding: 15px 20px;
+        margin: 12px 0;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 16px;
+    }
+
+    .mcq-option:hover {
+        border-color: var(--accent);
+        background: var(--accent-light);
+        transform: translateX(5px);
+    }
+
+    .mcq-option.selected {
+        border-color: var(--accent);
+        background: var(--accent-light);
+    }
+
+    .mcq-option.correct {
+        border-color: var(--success);
+        background: #d1fae5;
+    }
+
+    .mcq-option.incorrect {
+        border-color: var(--error);
+        background: #fee2e2;
+    }
+
+    .formula {
+        background: #f9fafb;
+        border: 2px dashed var(--accent);
+        padding: 20px;
+        margin: 20px 0;
+        border-radius: 8px;
+        font-family: 'Courier New', monospace;
+        font-size: 18px;
+        font-weight: 600;
+        text-align: center;
+    }
+
+    .calculation-input {
+        width: 100%;
+        padding: 15px;
+        border: 2px solid var(--border);
+        border-radius: 8px;
+        font-size: 16px;
+        margin: 10px 0;
+        font-family: 'IBM Plex Sans', sans-serif;
+    }
+
+    .calculation-input:focus {
+        outline: none;
+        border-color: var(--accent);
+    }
+
+    button {
+        background: var(--text-primary);
+        color: white;
+        border: none;
+        padding: 12px 28px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        font-family: 'IBM Plex Sans', sans-serif;
+    }
+
+    button:hover {
+        background: var(--text-secondary);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px var(--shadow);
+    }
+
+    .btn-check {
+        background: var(--accent);
+        margin-top: 15px;
+    }
+
+    .btn-check:hover {
+        background: #1d4ed8;
+    }
+
+    .feedback {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 8px;
+        font-weight: 500;
+        display: none;
+    }
+
+    .feedback.show {
+        display: block;
+        animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    .feedback.correct {
+        background: #d1fae5;
+        color: #065f46;
+        border: 2px solid var(--success);
+    }
+
+    .feedback.incorrect {
+        background: #fee2e2;
+        color: #991b1b;
+        border: 2px solid var(--error);
+    }
+
+    .navigation {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 50px;
+        padding-top: 30px;
+        border-top: 2px solid var(--border);
+    }
+
+    .progress-bar {
+        flex-grow: 1;
+        height: 8px;
+        background: var(--border);
+        border-radius: 10px;
+        margin: 0 30px;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--accent) 0%, #1d4ed8 100%);
+        border-radius: 10px;
+        transition: width 0.5s ease;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+        margin: 20px 0;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        background: white;
+        box-shadow: 0 2px 8px var(--shadow);
+    }
+
+    th, td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 1px solid var(--border);
+    }
+
+    th {
+        background: var(--text-primary);
+        color: white;
+        font-weight: 600;
+    }
+
+    tr:hover {
+        background: #f9fafb;
+    }
+
+    .highlight {
+        background: linear-gradient(120deg, #fef3c7 0%, #fde68a 100%);
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-weight: 600;
+    }
+
+    textarea {
+        width: 100%;
+        padding: 15px;
+        border: 2px solid var(--border);
+        border-radius: 8px;
+        font-size: 16px;
+        font-family: 'IBM Plex Sans', sans-serif;
+        margin: 10px 0;
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    textarea:focus {
+        outline: none;
+        border-color: var(--accent);
+    }
+
+    ul, ol {
+        margin: 15px 0;
+        padding-left: 30px;
+    }
+
+    li {
+        margin: 8px 0;
+        line-height: 1.8;
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            padding: 40px 20px;
+        }
+
+        h1 {
+            font-size: 32px;
+        }
+
+        h2 {
+            font-size: 24px;
+        }
+
+        .navigation {
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            margin: 20px 0;
+        }
+    }
+</style>
+```
+
+</head>
+<body>
+    <div class="container">
+        <!-- Slide 1: Income Statement Introduction -->
+        <div class="slide active" data-slide="1">
+            <div class="slide-header">
+                <div class="slide-number">SLIDE 01 / 20</div>
+                <h1>The Income Statement</h1>
+            </div>
+
+```
+        <div class="concept-box">
+            <h3>Core Concept</h3>
+            <p>The Income Statement (also called Profit & Loss Statement or P&L) shows a company's financial performance over a specific period, typically one year. It answers the crucial question: "Did the business make money, and how?"</p>
+        </div>
+
+        <div class="explanation">
+            <h3>In Plain English</h3>
+            <p>Think of it as a report card for a business. Just like your bank statement shows money coming in (salary) and going out (expenses) over a month, an income statement shows all the money a company earned from selling products or services, and all the costs involved in running the business during that time.</p>
+            <p>If the company earned more than it spent, it made a <span class="highlight">profit</span>. If it spent more than it earned, it made a <span class="highlight">loss</span>.</p>
+        </div>
+
+        <div class="example-box">
+            <h3>🌟 Real-World Example: Netflix (2024)</h3>
+            <p>Netflix's Q3 2024 income statement showed <strong>$9.82 billion in revenue</strong> from streaming subscriptions. After deducting content costs ($6.2B for shows and movies), technology expenses, and marketing, they reported a <strong>net profit of $2.36 billion</strong>.</p>
+            <p>This told investors that Netflix's business model (subscription streaming) was highly profitable that quarter, leading to a stock price increase.</p>
+            <div class="reference">Source: Netflix Inc. Q3 2024 Earnings Report, October 2024</div>
+        </div>
+
+        <div class="question-box">
+            <h3>💡 Check Your Understanding (MCQ)</h3>
+            <p><strong>Which statement best describes the purpose of an Income Statement?</strong></p>
+            <div class="mcq-option" onclick="checkAnswer(1, 'A', false)">
+                A) To show what the company owns and owes at a specific point in time
+            </div>
+            <div class="mcq-option" onclick="checkAnswer(1, 'B', true)">
+                B) To show whether the company made a profit or loss over a period of time
+            </div>
+            <div class="mcq-option" onclick="checkAnswer(1, 'C', false)">
+                C) To show how much cash moved in and out of the business
+            </div>
+            <div class="mcq-option" onclick="checkAnswer(1, 'D', false)">
+                D) To show how shareholders' equity has changed
+            </div>
+            <div class="feedback" id="feedback-1"></div>
+        </div>
+    </div>
+
+    <!-- Slide 2: Revenue -->
+    <div class="slide" data-slide="2">
+        <div class="slide-header">
+            <div class="slide-number">SLIDE 02 / 20</div>
+            <h1>Revenue: The Top Line</h1>
+        </div>
+
+        <div class="concept-box">
+            <h3>Core Concept</h3>
+            <p><strong>Revenue</strong> is the total income generated from normal business activities before any costs are deducted. It includes sales of products, service income, fees, and subscriptions. Revenue is often called the "top line" because it appears first on the income statement.</p>
+        </div>
+
+        <div class="explanation">
+            <h3>In Plain English</h3>
+            <p>Revenue is simply all the money a business brings in from doing what it does. For a coffee shop, it's the money from selling coffees and pastries. For Apple, it's money from selling iPhones, MacBooks, and services like iCloud.</p>
+            <p><strong>Important:</strong> Revenue is NOT the same as profit. It's the total money earned <em>before</em> paying for ingredients, rent, salaries, or any other expenses.</p>
+        </div>
+
+        <div class="example-box">
+            <h3>🌟 Real-World Example: Spotify (2024)</h3>
+            <p>In Q3 2024, Spotify reported <strong>€3.99 billion in revenue</strong>, broken down as:</p>
+            <ul>
+                <li><strong>€3.65 billion</strong> from Premium subscriptions (682 million paid users)</li>
+                <li><strong>€340 million</strong> from advertising (free tier users)</li>
+            </ul>
+            <p>This 19% year-over-year revenue growth showed Spotify's expanding user base, but they still had to pay music royalties, employee salaries, and technology costs before calculating profit.</p>
+            <div class="reference">Source: Spotify Technology S.A. Q3 2024 Shareholder Letter, October 2024</div>
+        </div>
+
+        <div class="question-box">
+            <h3>💡 Calculation Challenge</h3>
+            <p><strong>Scenario:</strong> A new online clothing brand had the following sales in their first quarter:</p>
+            <ul>
+                <li>January: £45,000</li>
+                <li>February: £52,000</li>
+                <li>March: £61,000</li>
+            </ul>
+            <p><strong>Calculate the total revenue for Q1:</strong></p>
+            <input type="number" class="calculation-input" id="calc-2" placeholder="Enter your answer in £">
+            <button class="btn-check" onclick="checkCalculation(2, 158000)">Check Answer</button>
+            <div class="feedback" id="feedback-2"></div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Cost of Sales -->
+    <div class="slide" data-slide="3">
+        <div class="slide-header">
+            <div class="slide-number">SLIDE 03 / 20</div>
+            <h1>Cost of Sales</h1>
+        </div>
+
+        <div class="concept-box">
+            <h3>Core Concept</h3>
+            <p><strong>Cost of Sales</strong> (also called Cost of Goods Sold - COGS) represents the direct costs of producing the goods or services that were sold. This includes raw materials, direct labor, and manufacturing costs directly tied to production.</p>
+        </div>
+
+        <div class="explanation">
+            <h3>In Plain English</h3>
+            <p>This is what it actually costs to make or buy the products you sell. For a bakery, it's the flour, eggs, sugar, and the baker's wages. For Amazon, it's the cost of buying inventory from suppliers plus warehouse labor.</p>
+            <p><strong>Key point:</strong> These are ONLY costs directly linked to making the product. Things like office rent, marketing, or CEO salary are NOT included here - they're operating expenses.</p>
+        </div>
+
+        <div class="example-box">
+            <h3>🌟 Real-World Example: Tesla (2024)</h3>
+            <p>Tesla's Q3 2024 financial results showed:</p>
+            <ul>
+                <li><strong>Revenue:</strong> $25.18 billion</li>
+                <li><strong>Cost of Sales:</strong> $20.05 billion</li>
+            </ul>
+            <p>This $20B included the cost of battery materials, steel, aluminum, labor for assembly line workers, and manufacturing facilities. Tesla's strategy of vertical integration (making their own batteries) helped reduce cost of sales per vehicle from $38,000 to $35,100, improving profitability.</p>
+            <div class="reference">Source: Tesla Inc. Q3 2024 Update, October 2024</div>
+        </div>
+
+        <div class="question-box">
+            <h3>💡 Application Question (MCQ)</h3>
+            <p><strong>Which of the following would be included in "Cost of Sales" for a smartphone manufacturer?</strong></p>
+            <div class="mcq-option" onclick="checkAnswer(3, 'A', false)">
+                A) Advertising campaign costs for new phone launch
+            </div>
+            <div class="mcq-option" onclick="checkAnswer(3, 'B', true)">
+                B) Cost of microchips, screens, and batteries
+            </div>
+            <div class="mcq-option" onclick="checkAnswer(3, 'C', false)">
+                C) Salaries of marketing executives
+            </div>
+            <div class="mcq-option" onclick="checkAnswer(3, 'D', false)">
+                D) Rent for corporate headquarters
+            </div>
+            <div class="feedback" id="feedback-3"></div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Gross Profit -->
+    <div class="slide" data-slide="4">
+        <div class="slide-header">
+            <div class="slide-number">SLIDE 04 / 20</div>
+            <h1>Gross Profit</h1>
+        </div>
+
+        <div class="concept-box">
+            <h3>Core Concept</h3>
+            <p><strong>Gross Profit</strong> is calculated by subtracting Cost of Sales from Revenue. It shows how profitable a company's core product or service is before accounting for operating expenses like marketing, administration, and research.</p>
+            <div class="formula">Gross Profit = Revenue - Cost of Sales</div>
+        </div>
+
+        <div class="explanation">
+            <h3>In Plain English</h3>
+            <p>Gross profit tells you how much money is left after you've paid for making your product. If you sell a handmade bracelet for £20 and the beads cost £5, your gross profit is £15.</p>
+            <p>A high gross profit means you have good "markup" on your products. A low gross profit means you're selling things too cheaply or your production costs are too high. Either way, you still need to pay rent, marketing, and salaries from this amount.</p>
+        </div>
+
+        <div class="example-box">
+            <h3>🌟 Real-World Example: LVMH (Luxury Goods - 2024)</h3>
+            <p>LVMH (Louis Vuitton, Dior, Tiffany) reported in their 2024 H1 results:</p>
+            <ul>
+                <li><strong>Revenue:</strong> €41.7 billion</li>
+                <li><strong>Cost of Sales:</strong> €13.2 billion</li>
+                <li><strong>Gross Profit:</strong> €28.5 billion (68% gross margin)</li>
+            </ul>
+            <p>Luxury brands command exceptionally high gross profits because customers pay premium prices. A Dior handbag might cost €300 to make but sells for €2,500, creating huge gross profit that funds flagship stores, fashion shows, and celebrity endorsements.</p>
+            <div class="reference">Source: LVMH First Half 2024 Results, July 2024</div>
+        </div>
+
+        <div class="question-box">
+            <h3>💡 Calculation Challenge</h3>
+            <p><strong>A tech startup selling software subscriptions reports:</strong></p>
+            <ul>
+                <li>Annual Revenue: £850,000</li>
+                <li>Server and hosting costs: £95,000</li>
+                <li>Customer support staff wages: £145,000</li>
+                <li>Marketing expenses: £180,000</li>
+            </ul>
+            <p><strong>Calculate the Gross Profit:</strong> (Note: Only include direct costs of delivering the service)</p>
+            <input type="number" class="calculation-input" id="calc-4" placeholder="Enter gross profit in £">
+            <button class="btn-check" onclick="checkCalculation(4, 755000)">Check Answer</button>
+            <div class="feedback" id="feedback-4"></div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Operating Expenses -->
+    <div class="slide" data-slide="5">
+        <div class="slide-header">
+            <div class="slide-number">SLIDE 05 / 20</div>
+            <h1>Operating Expenses</h1>
+        </div>
+
+        <div class="concept-box">
+            <h3>Core Concept</h3>
+            <p><strong>Operating Expenses</strong> are the day-to-day costs of running a business that aren't directly tied to production. These include salaries (admin staff), rent, utilities, marketing, insurance, depreciation, and office supplies.</p>
+        </div>
+
+        <div class="explanation">
+            <h3>In Plain English</h3>
+            <p>These are all the "keeping the lights on" costs. Even if you didn't sell a single product this month, you'd still have to pay these expenses. Your office rent doesn't change whether you sell 100 or 1,000 units.</p>
+            <p>Operating expenses are sometimes split into categories like:</p>
+            <ul>
+                <li><strong>Selling expenses:</strong> Advertising, sales commissions, delivery costs</li>
+                <li><strong>Administrative expenses:</strong> Office rent, management salaries, legal fees</li>
+                <li><strong>Research & Development:</strong> Innovation and product development costs</li>
+            </ul>
+        </div>
+
+        <div class="example-box">
+            <h3>🌟 Real-World Example: Meta Platforms (2024)</h3>
+            <p>Meta (Facebook, Instagram, WhatsApp) reported Q3 2024 operating expenses of <strong>$23.2 billion</strong>, including:</p>
+            <ul>
+                <li><strong>$13.7 billion</strong> on Research & Development (AI development, metaverse)</li>
+                <li><strong>$5.2 billion</strong> on Sales & Marketing</li>
+                <li><strong>$4.3 billion</strong> on General & Administrative costs</li>
+            </ul>
+            <p>Meta's heavy R&D spending reflects their bet on AI and virtual reality. While controversial with investors, CEO Mark Zuckerberg argues this innovation spending will drive future revenue growth.</p>
+            <div class="reference">Source: Meta Platforms Inc. Q3 2024 Results, October 2024</div>
+        </div>
+
+        <div class="question-box">
+            <h3>💡 Classification Exercise (MCQ)</h3>
+            <p><strong>Which of the following is NOT typically classified as an operating expense?</strong></p>
+            <div class="mcq-option" onclick="checkAnswer(5, 'A', false)">
+                A) Office rent and utilities
+            </div>
+            <div class="mcq-option" onclick="checkAnswer(5, 'B', false)">
+                C) Marketing and advertising costs
+            </div>
+            <div class="mcq-option" onclick="checkAnswer(5, 'C', true)">
+                C) Raw materials used in manufacturing
+            </div>
+            <div class="mcq-option" onclick="checkAnswer(5, 'D', false)">
+                D) Salaries of administrative staff
+            </div>
+            <div class="feedback" id="feedback-5"></div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Operating Profit -->
+    <div class="slide" data-slide="6">
+        <div class="slide-header">
+            <div class="slide-number">SLIDE 06 / 20</div>
+            <h1>Operating Profit (EBIT)</h1>
+        </div>
+
+        <div class="concept-box">
+            <h3>Core Concept</h3>
+            <p><strong>Operating Profit</strong> (also called EBIT - Earnings Before Interest and Tax) is calculated by subtracting operating expenses from gross profit. It shows the profit generated from core business operations, before considering financing costs and taxes.</p>
+            <div class="formula">Operating Profit = Gross Profit - Operating Expenses</div>
+        </div>
+
+        <div class="explanation">
+            <h3>In Plain English</h3>
+            <p>This tells you if the actual business is profitable, ignoring how it's funded (debt vs equity) and before the government takes its share in taxes. It's the purest measure of whether the company's business model works.</p>
+            <p>A company might have positive operating profit but still lose money overall if it has massive interest payments on loans. That's why investors watch this number closely - it shows operational health.</p>
+        </div>
+
+        <div class="example-box">
+            <h3>🌟 Real-World Example: Airbnb (2024)</h3>
+            <p>Airbnb's Q3 2024 results demonstrated strong operational performance:</p>
+            <ul>
+                <li><strong>Revenue:</strong> $3.73 billion</li>
+                <li><strong>Operating Expenses:</strong> $2.18 billion</li>
+                <li><strong>Operating Profit:</strong> $1.55 billion (42% operating margin)</li>
+            </ul>
+            <p>Airbnb's asset-light model (they don't own properties) results in high operating margins. After the pandemic forced them to cut costs, they've maintained lean operations while revenue rebounded, making their core marketplace business extremely profitable.</p>
+            <div class="reference">Source: Airbnb Inc. Q3 2024 Shareholder Letter, November 2024</div>
+        </div>
+
+        <div class="question-box">
+            <h3>💡 Business Analysis Question</h3>
+            <p><strong>Company A and Company B both have £5 million in revenue:</strong></p>
+            <ul>
+                <li><strong>Company A:</strong> Operating profit of £2 million (40% margin)</li>
+                <li><strong>Company B:</strong> Operating profit of £500,000 (10% margin)</li>
+            </ul>
+            <p><strong>What does this tell us?</strong></p>
+            <textarea id="analysis-6" placeholder="Write your analysis here (50-100 words)..."></textarea>
+            <button class="btn-check" onclick="showSampleAnswer(6)">Show Sample Answer</button>
+            <div class="feedback" id="feedback-6"></div>
+        </div>
+    </div>
+
+    <!-- Slide 7: Net Profit -->
+    <div class="slide" data-slide="7">
+        <div class="slide-header">
+            <div class="slide-number">SLIDE 07 / 20</div>
+            <h1>Net Profit: The Bottom Line</h1>
+        </div>
+
+        <div class="concept-box">
+            <h3>Core Concept</h3>
+            <p><strong>Net Profit</strong> (also called "the bottom line" or net income) is the final profit after ALL expenses including interest payments on debt and taxation. It's what's left for the owners/shareholders.</p>
+            <div class="formula">Net Profit = Operating Profit - Interest - Tax</div>
+        </div>
+
+        <div class="explanation">
+            <h3>In Plain English</h3>
+            <p>This is the final answer to "Did we make money?" After paying for everything - products, staff, rent, loans, and taxes - what's left? That's net profit. It can be reinvested in the business or distributed to shareholders as dividends.</p>
+            <p><strong>Why it matters:</strong> A company can have great revenue but terrible net profit if costs are too high, or heavy debt means massive interest payments.</p>
+        </div>
+
+        <div class="example-box">
+            <h3>🌟 Real-World Example: Microsoft (2024)</h3>
+            <p>Microsoft's Q1 FY2025 (July-Sept 2024) showed the power of software margins:</p>
+            <ul>
+                <li><strong>Revenue:</strong> $65.6 billion</li>
+                <li><strong>Operating Income:</strong> $30.6 billion</li>
+                <li><strong>Net Income:</strong> $24.7 billion (38% net margin)</li>
+            </ul>
+            <p>Microsoft's cloud services (Azure) and Office 365 subscriptions generate recurring revenue with low marginal costs. Their massive net profit funded a $75 billion stock buyback program and quarterly dividends, rewarding shareholders while still investing billions in AI.</p>
+            <div class="reference">Source: Microsoft Corp. Q1 FY2025 Earnings Release, October 2024</div>
+        </div>
+
+        <div class="question-box">
+            <h3>💡 Comprehensive Calculation</h3>
+            <p><strong>Calculate the Net Profit:</strong></p>
+            <ul>
+                <li>Revenue: £2,400,000</li>
+                <li>Cost of Sales: £960,000</li>
+                <li>Operating Expenses: £720,000</li>
+                <li>Interest Expense: £80,000</li>
+                <li>Tax Rate: 20% of profit before tax</li>
+            </ul>
+            <input type="number" class="calculation-input" id="calc-7" placeholder="Enter net profit in £">
+            <button class="btn-check" onclick="checkCalculation(7, 512000)">Check Answer</button>
+            <div class="feedback" id="feedback-7"></div>
+        </div>
+    </div>
+
+    <!-- Slide 8: Inventory and Gross Profit -->
+    <div class="slide" data-slide="8">
+        <div class="slide-header">
+            <div class="slide-number">SLIDE 08 / 20</div>
+            <h1>Opening & Closing Inventory</h1>
+        </div>
+
+        <div class="concept-box">
+            <h3>Core Concept</h3>
+            <p><strong>Opening Inventory</strong> is the value of unsold goods at the start of the accounting period. <strong>Closing Inventory</strong> is the value at the end. These figures are crucial for calculating the actual cost of goods sold during the period.</p>
+            <div class="formula">Cost of Goods Sold = Opening Inventory + Purchases - Closing Inventory</div>
+        </div>
+
+        <div class="explanation">
+            <h3>In Plain English</h3>
+            <p>Imagine you run a bookshop. On January 1st, you have £10,000 worth of books (opening inventory). During the year, you buy £50,000 more books. On December 31st, you still have £8,000 worth of unsold books (closing inventory).</p>
+            <p>Your cost of goods sold isn't £50,000 (what you bought) - it's £52,000 (£10k + £50k - £8k). That's because you sold some of your opening stock too.</p>
+        </div>
+
+        <div class="example-box">
+            <h3>🌟 Real-World Example: Zara (Inditex - 2024)</h3>
+            <p>Fast fashion retailer Zara (Inditex Group) manages inventory extremely tightly:</p>
+            <ul>
+                <li><strong>Inventory turnover:</strong> 6-7 times per year (industry avg: 3-4 times)</li>
+                <li><strong>Strategy:</strong> Small batches, quick production cycles (2-3 weeks)</li>
+            </ul>
+            <p>By keeping low inventory levels and rapidly selling through stock, Zara reduces the risk of markdowns (discounting unsold items). Their 2024 results showed inventory days of just 52 days compared to competitors like H&M at 100+ days. Less inventory means less capital tied up and fresher, trendier products.</p>
+            <div class="reference">Source: Inditex FY2023 Annual Report & Industry Analysis, March 2024</div>
+        </div>
+
+        <div class="question-box">
+            <h3>💡 Inventory Calculation</h3>
+            <p><strong>A retail business has the following data:</strong></p>
+            <ul>
+                <li>Opening Inventory (1 Jan): £45,000</li>
+                <li>Purchases during year: £380,000</li>
+                <li>Closing Inventory (31 Dec): £52,000</li>
+            </ul>
+            <p><strong>Calculate the Cost of Goods Sold:</strong></p>
+            <input type="number" class="calculation-input" id="calc-8" placeholder="Enter COGS in £">
+            <button class="btn-check" onclick="checkCalculation(8, 373000)">Check Answer</button>
+            <div class="feedback" id="feedback-8"></div>
+        </div>
+    </div>
+
+    <!-- Slide 9: Balance Sheet Introduction -->
+    <div class="slide" data-slide="9">
+        <div class="slide-header">
+            <div class="slide-number">SLIDE 09 / 20</div>
+            <h1>The Balance Sheet</h1>
+        </div>
+
+        <div class="concept-box">
+            <h3>Core Concept</h3>
+            <p>The <strong>Balance Sheet</strong> (Statement of Financial Position) is a snapshot of what a company owns (assets), what it owes (liabilities), and the owners' stake (equity) at a specific point in time. It follows the fundamental accounting equation:</p>
+            <div class="formula">Assets = Liabilities + Equity</div>
+        </div>
+
+        <div class="explanation">
+            <h3>In Plain English</h3>
+            <p>Think of it like a financial selfie of the company taken on December 31st (or any specific date). It shows:</p>
+            <ul>
+                <li><strong>Assets:</strong> Everything valuable the company owns (cash, buildings, equipment, inventory)</li>
+                <li><strong>Liabilities:</strong> What the company owes to others (loans, unpaid bills)</li>
+                <li><strong>Equity:</strong> What belongs to the owners (the difference between assets and liabilities)</li>
+            </ul>
+            <p>Unlike the Income Statement (which covers a period), the Balance Sheet is a single moment in time.</p>
+        </div>
+
+        <div class="example-box">
+            <h3>🌟 Real-World Example: Apple Inc. (September 2024)</h3>
+            <p>Apple's Balance Sheet as of September 28, 2024 showed:</p>
+            <ul>
+                <li><strong>Total Assets:</strong> $364.98 billion</li>
+                <li><strong>Total Liabilities:</strong> $258.55 billion</li>
+                <li><strong>Shareholders' Equity:</strong> $106.43 billion</li>
+            </ul>
+            <p>Apple's massive cash reserves ($162B in cash and securities) give them flexibility for R&D, acquisitions, and shareholder returns. Despite having substantial liabilities, their asset base is so strong that they maintain one of the highest credit ratings in corporate America.</p>
+            <div class="reference">Source: Apple Inc. Q4 FY2024 10-K Filing, November 2024</div>
+        </div>
+
+        <div class="question-box">
+            <h3>💡 Understanding the Equation (MCQ)</h3>
+            <p><strong>A company has £500,000 in assets and £180,000 in liabilities. What is the shareholders' equity?</strong></p>
+            <div class="mcq-option" onclick="checkAnswer(9, 'A', false)">
+                A) £680,000
+            </div>
+            <div class="mcq-option" onclick="checkAnswer(9, 'B', true)">
+                B) £320,000
+            </div>
+            <div class="mcq-option" onclick="checkAnswer(9, 'C', false)">
+                C) £180,000
+            </div>
+            <div class="mcq-option" onclick="checkAnswer(9, 'D', false)">
+                D) £500,000
+            </div>
+            <div class="feedback" id="feedback-9"></div>
+        </div>
+    </div>
+
+    <!-- Slide 10: Non-Current (Fixed) Assets -->
+    <div class="slide" data-slide="10">
+        <div class="slide-header">
+            <div class="slide-number">SLIDE 10 / 20</div>
+            <h1>Non-Current (Fixed) Assets</h1>
+        </div>
+
+        <div class="concept-box">
+            <h3>Core Concept</h3>
+            <p><strong>Non-Current Assets</strong> (Fixed Assets) are long-term resources owned by a business for more than one year. They're used to operate the business rather than being sold. Examples include land, buildings, machinery, vehicles, and patents.</p>
+        </div>
+
+        <div class="explanation">
+            <h3>In Plain English</h3>
+            <p>These are the "big ticket" items a business owns and uses for the long haul. A delivery company's fleet of vans, a factory's manufacturing equipment, or a tech company's patents - these aren't meant to be sold quickly; they help the business operate year after year.</p>
+            <p>Fixed assets typically <strong>depreciate</strong> (lose value over time) except land, which usually doesn't depreciate.</p>
+        </div>
+
+        <div class="example-box">
+            <h3>🌟 Real-World Example: Amazon (2024)</h3>
+            <p>Amazon's massive infrastructure investment is reflected in their balance sheet:</p>
+            <ul>
+                <li><strong>Property & Equipment:</strong> $204 billion (warehouses, data centers, vehicles)</li>
+                <li><strong>Operating Leases:</strong> $67 billion (long-term facility leases)</li>
+            </ul>
+            <p>Amazon's "asset-heavy" model requires enormous capital investment in fulfillment centers and AWS data centers. In 2023-24, they invested over $50B annually in fixed assets to expand Prime delivery speed and cloud computing capacity - a barrier to entry that protects their market position.</p>
+            <div class="reference">Source: Amazon.com Inc. Q3 2024 10-Q Filing, October 2024</div>
+        </div>
+
+        <div class="question-box">
+            <h3>💡 Classification Exercise (MCQ)</h3>
+            <p><strong>Which of the following is a non-current (fixed) asset?</strong></p>
+            <div class="mcq-option" onclick="checkAnswer(10, 'A', false)">
+                A) Cash in the bank
+            </div>
+            <div class="mcq-option" onclick="checkAnswer(10, 'B', false)">
+                B) Inventory of finished goods
+            </div>
+            <div class="mcq-option" onclick="checkAnswer(10, 'C', true)">
+                C) Factory machinery
+            </div>
+            <div class="mcq-option" onclick="checkAnswer(10, 'D', false)">
+                D) Money owed by customers
+            </div>
+            <div class="feedback" id="feedback-10"></div>
+        </div>
+    </div>
+
+    <!-- Slide 11: Current Assets -->
+    <div class="slide" data-slide="11">
+        <div class="slide-header">
+            <div class="slide-number">SLIDE 11 / 20</div>
+            <h1>Current Assets</h1>
+        </div>
+
+        <div class="concept-box">
+            <h3>Core Concept</h3>
+            <p><strong>Current Assets</strong> are short-term assets expected to be converted into cash, sold, or used within one year. They include cash, inventory, trade receivables (money owed by customers), and short-term investments.</p>
+        </div>
+
+        <div class="explanation">
+            <h3>In Plain English</h3>
+            <p>These are assets that move quickly through the business cycle. Cash is already liquid. Inventory gets sold for cash. Trade receivables (when customers owe you money) get collected within months.</p>
+            <p><strong>Why it matters:</strong> Current assets show a company's ability to meet short-term obligations and fund day-to-day operations. Too little cash and inventory can cause problems; too much inventory might mean slow sales.</p>
+        </div>
+
+        <div class="example-box">
+            <h3>🌟 Real-World Example: Nvidia (2024)</h3>
+            <p>Nvidia's Q3 FY2025 balance sheet (October 2024) showed exceptional current asset management:</p>
+            <ul>
+                <li><strong>Cash & Investments:</strong> $34.8 billion</li>
+                <li><strong>Accounts Receivable:</strong> $14.2 billion (money owed by customers like Microsoft, Google)</li>
+                <li><strong>Inventory:</strong> $6.7 billion (AI chips, GPUs)</li>
+            </ul>
+            <p>Nvidia's huge cash pile from AI chip sales gives them power to fund R&D, make acquisitions, and return cash to shareholders. High receivables reflect strong demand - major tech companies ordering billions in GPUs with standard payment terms.</p>
+            <div class="reference">Source: Nvidia Corp. Q3 FY2025 Financial Statements, November 2024</div>
+        </div>
+
+        <div class="question-box">
+            <h3>💡 Real-World Analysis</h3>
+            <p><strong>Two companies in the same industry have different current asset compositions:</strong></p>
+            <ul>
+                <li><strong>Company X:</strong> 60% cash, 20% receivables, 20% inventory</li>
+                <li><strong>Company Y:</strong> 10% cash, 30% receivables, 60% inventory</li>
+            </ul>
+            <p><strong>What might this tell us about their business models and risks?</strong></p>
+            <textarea id="analysis-11" placeholder="Write your analysis (75-100 words)..."></textarea>
+            <button class="btn-check" onclick="showSampleAnswer(11)">Show Sample Answer</button>
+            <div class="feedback" id="feedback-11"></div>
+        </div>
+    </div>
+
+    <!-- Slide 12: Current Liabilities -->
+    <div class="slide" data-slide="12">
+        <div class="slide-header">
+            <div class="slide-number">SLIDE 12 / 20</div>
+            <h1>Current Liabilities</h1>
+        </div>
+
+        <div class="concept-box">
+            <h3>Core Concept</h3>
+            <p><strong>Current Liabilities</strong> are short-term obligations the company must pay within one year. These include trade payables (money owed to suppliers), short-term loans, accrued expenses, and taxes payable.</p>
+        </div>
+
+        <div class="explanation">
+            <h3>In Plain English</h3>
+            <p>These are bills coming due soon - usually within the next 12 months. If you bought inventory on credit and the supplier wants payment in 30 days, that's a current liability. Wages you owe employees, taxes due next quarter, or a loan payment due in 6 months all count.</p>
+            <p><strong>Managing current liabilities:</strong> Smart businesses negotiate longer payment terms with suppliers (60-90 days) while collecting from customers faster (30 days), improving cash flow.</p>
+        </div>
+
+        <div class="example-box">
+            <h3>🌟 Real-World Example: Walmart (2024)</h3>
+            <p>Walmart's October 2024 balance sheet showed current liabilities of <strong>$112 billion</strong>, including:</p>
+            <ul>
+                <li><strong>Accounts Payable:</strong> $55 billion (owed to suppliers)</li>
+                <li><strong>Accrued Liabilities:</strong> $34 billion (wages, taxes, utilities)</li>
+                <li><strong>Short-term Debt:</strong> $7 billion</li>
+            </ul>
+            <p>Walmart's negotiating power lets them take 60+ days to pay suppliers while customers pay immediately. This "negative cash conversion cycle" means suppliers effectively finance Walmart's operations - a huge competitive advantage generating billions in free cash flow.</p>
+            <div class="reference">Source: Walmart Inc. Q3 FY2025 10-Q Filing, November 2024</div>
+        </div>
+
+        <div class="question-box">
+            <h3>💡 Quick Question (MCQ)</h3>
+            <p><strong>Which item would NOT be classified as a current liability?</strong></p>
+            <div class="mcq-option" onclick="checkAnswer(12, 'A', false)">
+                A) Wages payable to employees for last month
+            </div>
+            <div class="mcq-option" onclick="checkAnswer(12, 'B', false)">
+                B) Taxes due to be paid in 3 months
+            </div>
+            <div class="mcq-option" onclick="checkAnswer(12, 'C', true)">
+                C) A 10-year bank loan
+            </div>
+            <div class="mcq-option" onclick="checkAnswer(12, 'D', false)">
+                D) Money owed to suppliers due in 60 days
+            </div>
+            <div class="feedback" id="feedback-12"></div>
+        </div>
+    </div>
+
+    <!-- Slide 13: Working Capital -->
+    <div class="slide" data-slide="13">
+        <div class="slide-header">
+            <div class="slide-number">SLIDE 13 / 20</div>
+            <h1>Working Capital</h1>
+        </div>
+
+        <div class="concept-box">
+            <h3>Core Concept</h3>
+            <p><strong>Working Capital</strong> measures a company's short-term financial health. It's the difference between current assets and current liabilities, showing whether the business has enough liquid resources to meet short-term obligations.</p>
+            <div class="formula">Working Capital = Current Assets - Current Liabilities</div>
+        </div>
+
+        <div class="explanation">
+            <h3>In Plain English</h3>
+            <p>Working capital tells you if a company can pay its bills over the next year. Positive working capital (current assets > current liabilities) means the company is financially healthy in the short term. Negative working capital can signal trouble - unless you're a business model like Amazon that collects from customers before paying suppliers.</p>
+            <p><strong>Example:</strong> If you have £100,000 in current assets but £120,000 in current liabilities, you have -£20,000 working capital - a warning sign.</p>
+        </div>
+
+        <div class="example-box">
+            <h3>🌟 Real-World Example: Beyond Meat (2023-24 Crisis)</h3>
+            <p>Plant-based meat company Beyond Meat faced a working capital crisis:</p>
+            <ul>
+                <li><strong>Q3 2024:</strong> Current assets $332M, Current liabilities $392M = <strong>-$60M working capital</strong></li>
+                <li><strong>Impact:</strong> Couldn't pay suppliers on time, had to secure emergency financing</li>
+            </ul>
+            <p>Falling sales and excess inventory consumed cash. Negative working capital forced them to raise $100M through debt and equity, diluting shareholders. This real-world example shows why working capital management is critical - running out of liquidity can kill a business even if it's operationally viable.</p>
+            <div class="reference">Source: Beyond Meat Inc. Q3 2024 10-Q & Financial Analysis, November 2024</div>
+        </div>
+
+        <div class="question-box">
+            <h3>💡 Working Capital Calculation</h3>
+            <p><strong>Calculate the working capital and assess the company's short-term health:</strong></p>
+            <ul>
+                <li>Current Assets: £450,000</li>
+                <li>Current Liabilities: £380,000</li>
+            </ul>
+            <input type="number" class="calculation-input" id="calc-13" placeholder="Enter working capital in £">
+            <button class="btn-check" onclick="checkCalculation(13, 70000)">Check Answer</button>
+            <div class="feedback" id="feedback-13"></div>
+        </div>
+    </div>
+
+    <!-- Slide 14: Non-Current Liabilities -->
+    <div class="slide" data-slide="14">
+        <div class="slide-header">
+            <div class="slide-number">SLIDE 14 / 20</div>
+            <h1>Non-Current Liabilities</h1>
+        </div>
+
+        <div class="concept-box">
+            <h3>Core Concept</h3>
+            <p><strong>Non-Current Liabilities</strong> (Long-term Liabilities) are obligations due after more than one year. These include long-term loans, bonds payable, pension obligations, and deferred tax liabilities.</p>
+        </div>
+
+        <div class="explanation">
+            <h3>In Plain English</h3>
+            <p>These are debts you don't have to pay back immediately - they're due more than a year from now. A 20-year mortgage on a building, a 10-year corporate bond, or pension promises to retired employees all fall into this category.</p>
+            <p><strong>Why companies use them:</strong> Long-term debt can fund major investments (factories, acquisitions) at relatively low interest rates. As long as the business generates more return than the interest cost, it's smart financing.</p>
+        </div>
+
+        <div class="example-box">
+            <h3>🌟 Real-World Example: Boeing (2024)</h3>
+            <p>Aircraft manufacturer Boeing carries substantial long-term debt:</p>
+            <ul>
+                <li><strong>Long-term Debt:</strong> $52 billion (bonds, term loans)</li>
+                <li><strong>Context:</strong> Debt increased dramatically after 737 MAX grounding (2019) and pandemic</li>
+            </ul>
+            <p>Boeing's debt level is concerning to credit rating agencies. In October 2024, they raised an additional $21 billion through stock and bond sales to avoid cash crunch. High debt means heavy interest payments (~$2.5B annually), reducing profitability. This shows the risk of overleveraging - Boeing's investment-grade credit rating is at risk of being downgraded to "junk."</p>
+            <div class="reference">Source: Boeing Company Q3 2024 10-Q & Credit Analysis, October 2024</div>
+        </div>
+
+        <div class="question-box">
+            <h3>💡 Scenario Analysis</h3>
+            <p><strong>Company A has £50M in long-term debt at 5% interest. Company B (same size) has £5M at 8% interest. Both are profitable.</strong></p>
+            <p><strong>What are the advantages and risks of each approach?</strong></p>
+            <textarea id="analysis-14" placeholder="Discuss both companies' strategies (100 words)..."></textarea>
+            <button class="btn-check" onclick="showSampleAnswer(14)">Show Sample Answer</button>
+            <div class="feedback" id="feedback-14"></div>
+        </div>
+    </div>
+
+    <!-- Slide 15: Net Assets -->
+    <div class="slide" data-slide="15">
+        <div class="slide-header">
+            <div class="slide-number">SLIDE 15 / 20</div>
+            <h1>Net Assets</h1>
+        </div>
+
+        <div class="concept-box">
+            <h3>Core Concept</h3>
+            <p><strong>Net Assets</strong> represent the value of a company after all liabilities are deducted from total assets. This figure equals shareholders' equity and represents the "book value" of the business.</p>
+            <div class="formula">Net Assets = Total Assets - Total Liabilities = Equity</div>
+        </div>
+
+        <div class="explanation">
+            <h3>In Plain English</h3>
+            <p>If you sold everything the company owns (assets) and paid off everyone you owe (liabilities), what's left? That's net assets - the owners' true stake in the business.</p>
+            <p><strong>Key insight:</strong> Net assets can be lower than market value. Tesla's net assets might be $50B, but investors value the company at $800B because they believe in future growth. Conversely, a struggling retailer might have negative net assets (liabilities exceed assets) - technically insolvent.</p>
+        </div>
+
+        <div class="example-box">
+            <h3>🌟 Real-World Example: WeWork Collapse (2024)</h3>
+            <p>Co-working company WeWork filed for bankruptcy in November 2023 with:</p>
+            <ul>
+                <li><strong>Assets:</strong> $15 billion</li>
+                <li><strong>Liabilities:</strong> $18.6 billion</li>
+                <li><strong>Net Assets:</strong> <strong>-$3.6 billion</strong> (negative equity)</li>
+            </ul>
+            <p>Negative net assets meant WeWork owed more than it owned - a death sentence. Once valued at $47B (2019), overleveraging and unprofitable expansion left shareholders with nothing. The bankruptcy restructuring wiped out equity holders while creditors took control. This demonstrates why monitoring net asset trends is crucial for investors.</p>
+            <div class="reference">Source: WeWork Inc. Chapter 11 Bankruptcy Filing, November 2023 & Analysis</div>
+        </div>
+
+        <div class="question-box">
+            <h3>💡 Net Assets Calculation (MCQ)</h3>
+            <p><strong>A company has £2.5M in total assets and £950,000 in total liabilities. What are the net assets?</strong></p>
+            <div class="mcq-option" onclick="checkAnswer(15, 'A', false)">
+                A) £3,450,000
+            </div>
+            <div class="mcq-option" onclick="checkAnswer(15, 'B', true)">
+                B) £1,550,000
+            </div>
+            <div class="mcq-option" onclick="checkAnswer(15, 'C', false)">
+                C) £2,500,000
+            </div>
+            <div class="mcq-option" onclick="checkAnswer(15, 'D', false)">
+                D) £950,000
+            </div>
+            <div class="feedback" id="feedback-15"></div>
+        </div>
+    </div>
+
+    <!-- Slide 16: Equity (Shareholders' Equity) -->
+    <div class="slide" data-slide="16">
+        <div class="slide-header">
+            <div class="slide-number">SLIDE 16 / 20</div>
+            <h1>Equity (Shareholders' Equity)</h1>
+        </div>
+
+        <div class="concept-box">
+            <h3>Core Concept</h3>
+            <p><strong>Equity</strong> represents the owners' claim on the business. It consists of share capital (money invested by shareholders) and retained earnings (accumulated profits not distributed as dividends).</p>
+        </div>
+
+        <div class="explanation">
+            <h3>In Plain English</h3>
+            <p>Equity is what belongs to the owners. If you started a business with £50,000 of your own money, that's your initial equity. If the business makes £20,000 profit and you keep it in the company rather than taking it out, equity grows to £70,000.</p>
+            <p><strong>Two components:</strong></p>
+            <ul>
+                <li><strong>Share Capital:</strong> Original investment by owners/shareholders</li>
+                <li><strong>Retained Earnings:</strong> Profits kept in the business over time</li>
+            </ul>
+        </div>
+
+        <div class="example-box">
+            <h3>🌟 Real-World Example: Berkshire Hathaway (2024)</h3>
+            <p>Warren Buffett's Berkshire Hathaway demonstrates the power of retained earnings:</p>
+            <ul>
+                <li><strong>Share Capital:</strong> Minimal (original 1960s investment)</li>
+                <li><strong>Retained Earnings:</strong> Over $500 billion accumulated since 1965</li>
+                <li><strong>Book Value per Share:</strong> Grown from $19 (1965) to $548,000+ (2024)</li>
+            </ul>
+            <p>Buffett never pays dividends, reinvesting all profits into acquisitions and stocks. This compounding effect turned a struggling textile mill into a $900B conglomerate. Shareholders' equity growth of ~20% annually for 59 years shows the wealth-building power of retained earnings versus dividend payouts.</p>
+            <div class="reference">Source: Berkshire Hathaway 2023 Annual Report & Historical Analysis</div>
+        </div>
+
+        <div class="question-box">
+            <h3>💡 Equity Movement Exercise</h3>
+            <p><strong>A company starts 2024 with £800,000 in equity. During 2024:</strong></p>
+            <ul>
+                <li>Net profit: £180,000</li>
+                <li>Dividends paid to shareholders: £60,000</li>
+                <li>New shares issued for cash: £100,000</li>
+            </ul>
+            <p><strong>What is the equity at the end of 2024?</strong></p>
+            <input type="number" class="calculation-input" id="calc-16" placeholder="Enter closing equity in £">
+            <button class="btn-check" onclick="checkCalculation(16, 1020000)">Check Answer</button>
+            <div class="feedback" id="feedback-16"></div>
+        </div>
+    </div>
+
+    <!-- Slide 17: Cash Flow Statement Introduction -->
+    <div class="slide" data-slide="17">
+        <div class="slide-header">
+            <div class="slide-number">SLIDE 17 / 20</div>
+            <h1>Cash Flow Statement</h1>
+        </div>
+
+        <div class="concept-box">
+            <h3>Core Concept</h3>
+            <p>The <strong>Cash Flow Statement</strong> tracks the actual movement of cash in and out of the business during a period. It's divided into three sections: Operating Activities, Investing Activities, and Financing Activities.</p>
+        </div>
+
+        <div class="explanation">
+            <h3>In Plain English</h3>
+            <p>The cash flow statement answers: "Where did our cash come from, and where did it go?" Unlike the Income Statement (which uses accrual accounting), this tracks actual cash movements.</p>
+            <p><strong>Why it matters:</strong> A company can be profitable on paper but run out of cash if customers pay late, or too much cash is tied up in inventory. Many profitable companies have gone bankrupt due to cash flow problems - "revenue is vanity, profit is sanity, cash is reality."</p>
+        </div>
+
+        <div class="example-box">
+            <h3>🌟 Real-World Example: Peloton (2022-23)</h3>
+            <p>Fitness equipment company Peloton demonstrated the profit vs. cash flow gap:</p>
+            <ul>
+                <li><strong>2022 Results:</strong> Reported profit on some quarters due to accounting</li>
+                <li><strong>Cash Reality:</strong> Burned through $750M in cash</li>
+                <li><strong>Problem:</strong> Excess inventory (bought too many bikes during pandemic), delayed customer payments, high operating costs</li>
+            </ul>
+            <p>Despite occasionally showing accounting profit, negative cash flow forced Peloton to raise debt, cut staff by 20%, and close retail stores. The cash flow statement revealed the true financial stress that the income statement masked.</p>
+            <div class="reference">Source: Peloton Interactive Inc. FY2022-23 Reports & Cash Flow Analysis</div>
+        </div>
+
+        <div class="question-box">
+            <h3>💡 Concept Check (MCQ)</h3>
+            <p><strong>What is the main difference between profit and cash flow?</strong></p>
+            <div class="mcq-option" onclick="checkAnswer(17, 'A', false)">
+                A) They are the same thing measured differently
+            </div>
+            <div class="mcq-option" onclick="checkAnswer(17, 'B', true)">
+                B) Profit includes non-cash items and timing differences; cash flow tracks actual money movement
+            </div>
+            <div class="mcq-option" onclick="checkAnswer(17, 'C', false)">
+                C) Cash flow is always higher than profit
+            </div>
+            <div class="mcq-option" onclick="checkAnswer(17, 'D', false)">
+                D) Profit is more important than cash flow
+            </div>
+            <div class="feedback" id="feedback-17"></div>
+        </div>
+    </div>
+
+    <!-- Slide 18: Profit vs Cash - The Timing Problem -->
+    <div class="slide" data-slide="18">
+        <div class="slide-header">
+            <div class="slide-number">SLIDE 18 / 20</div>
+            <h1>Profit vs Cash: The Timing Gap</h1>
+        </div>
+
+        <div class="concept-box">
+            <h3>Core Concept</h3>
+            <p>Due to <strong>accrual accounting</strong>, revenue is recorded when earned (not when cash received) and expenses when incurred (not when paid). This creates timing differences between profit and cash flow.</p>
+        </div>
+
+        <div class="explanation">
+            <h3>In Plain English</h3>
+            <p>Imagine you make a £10,000 sale in March on 60-day credit terms. The customer pays in May.</p>
+            <ul>
+                <li><strong>Income Statement (March):</strong> Shows £10,000 revenue → increases profit</li>
+                <li><strong>Cash Flow (March):</strong> Shows £0 → no cash received yet</li>
+                <li><strong>Cash Flow (May):</strong> Shows +£10,000 → cash actually arrives</li>
+            </ul>
+            <p>This is why rapidly growing companies often have cash flow problems - they're making sales (profit) but waiting to collect cash, while they must pay suppliers and staff immediately.</p>
+        </div>
+
+        <div class="example-box">
+            <h3>🌟 Real-World Example: Construction Industry</h3>
+            <p>UK construction firm Carillion collapsed in 2018 despite reporting profits:</p>
+            <ul>
+                <li><strong>Revenue Recognition:</strong> Recorded revenue as projects progressed (accrual basis)</li>
+                <li><strong>Cash Reality:</strong> Clients paid in stages, often delayed 90-120 days</li>
+                <li><strong>Cost Timing:</strong> Had to pay subcontractors and materials immediately</li>
+            </ul>
+            <p>Carillion showed £5B annual revenue and modest profits, but negative cash flow of hundreds of millions. When they couldn't collect receivables fast enough, they ran out of cash to pay suppliers - leading to liquidation with £7B in liabilities. The "profit" was an accounting illusion.</p>
+            <div class="reference">Source: Carillion Collapse Analysis, UK Parliament Report, 2018</div>
+        </div>
+
+        <div class="question-box">
+            <h3>💡 Applied Scenario</h3>
+            <p><strong>A software company makes a £50,000 sale in March with 90-day payment terms. Does profit increase in March? Does cash increase in March?</strong></p>
+            <div class="mcq-option" onclick="checkAnswer(18, 'A', true)">
+                A) Profit increases in March; Cash does not increase in March
+            </div>
+            <div class="mcq-option" onclick="checkAnswer(18, 'B', false)">
+                B) Cash increases in March; Profit does not increase in March
+            </div>
+            <div class="mcq-option" onclick="checkAnswer(18, 'C', false)">
+                C) Both profit and cash increase in March
+            </div>
+            <div class="mcq-option" onclick="checkAnswer(18, 'D', false)">
+                D) Neither profit nor cash increases in March
+            </div>
+            <div class="feedback" id="feedback-18"></div>
+        </div>
+    </div>
+
+    <!-- Slide 19: Limitations of Financial Statements -->
+    <div class="slide" data-slide="19">
+        <div class="slide-header">
+            <div class="slide-number">SLIDE 19 / 20</div>
+            <h1>Limitations of Financial Statements</h1>
+        </div>
+
+        <div class="concept-box">
+            <h3>Core Concept</h3>
+            <p>While financial statements provide crucial information, they have important <strong>limitations</strong>: they're historical (backward-looking), based on estimates and judgments, may use historical cost rather than current value, and don't capture intangible assets like brand value or employee talent.</p>
+        </div>
+
+        <div class="explanation">
+            <h3>In Plain English</h3>
+            <p>Financial statements are like driving by looking in the rearview mirror - they tell you where you've been, not where you're going. They also involve subjective decisions:</p>
+            <ul>
+                <li><strong>Depreciation:</strong> How fast does equipment lose value? (Estimate)</li>
+                <li><strong>Bad debts:</strong> How many customers won't pay? (Estimate)</li>
+                <li><strong>Inventory valuation:</strong> What if prices changed? (Accounting choice)</li>
+            </ul>
+            <p>Plus, they miss crucial value drivers: Google's brand worth billions isn't on the balance sheet. A company's talented workforce isn't an "asset" in accounting terms.</p>
+        </div>
+
+        <div class="example-box">
+            <h3>🌟 Real-World Example: Enron Scandal (2001)</h3>
+            <p>Energy giant Enron's financial statements appeared healthy before collapse:</p>
+            <ul>
+                <li><strong>Reported Revenue:</strong> $100 billion (year 2000)</li>
+                <li><strong>Hidden Reality:</strong> Billions in debt hidden through off-balance-sheet entities</li>
+                <li><strong>Accounting Tricks:</strong> "Mark-to-market" accounting inflated profits with unrealized gains</li>
+            </ul>
+            <p>Enron exploited accounting loopholes and estimates to make losses look like profits. When exposed, the company went from $90B market cap to bankruptcy in weeks. This led to the Sarbanes-Oxley Act (2002) requiring stricter financial reporting and CEO/CFO certification of statements.</p>
+            <div class="reference">Source: Enron Scandal Case Study, SEC Investigation Reports, 2001-02</div>
+        </div>
+
+        <div class="question-box">
+            <h3>💡 Critical Thinking Exercise</h3>
+            <p><strong>You're analyzing two tech startups. Company A has strong balance sheet and profits. Company B has losses but revolutionary AI technology and top talent.</strong></p>
+            <p><strong>What do financial statements tell you, and what DON'T they tell you? How would you evaluate these companies?</strong></p>
+            <textarea id="analysis-19" placeholder="Your analysis (150 words)..."></textarea>
+            <button class="btn-check" onclick="showSampleAnswer(19)">Show Sample Answer</button>
+            <div class="feedback" id="feedback-19"></div>
+        </div>
+    </div>
+
+    <!-- Slide 20: Integrated Analysis & Final Summary -->
+    <div class="slide" data-slide="20">
+        <div class="slide-header">
+            <div class="slide-number">SLIDE 20 / 20</div>
+            <h1>Integrated Financial Analysis</h1>
+        </div>
+
+        <div class="concept-box">
+            <h3>Core Concept</h3>
+            <p>Effective financial analysis requires examining all three statements together. The <strong>Income Statement</strong> shows profitability, the <strong>Balance Sheet</strong> shows financial position, and the <strong>Cash Flow Statement</strong> shows liquidity. Each tells part of the story; together they reveal the complete financial health.</p>
+        </div>
+
+        <div class="explanation">
+            <h3>In Plain English</h3>
+            <p>Think of the three statements as different camera angles on the same business:</p>
+            <ul>
+                <li><strong>Income Statement:</strong> "Is the business model profitable?"</li>
+                <li><strong>Balance Sheet:</strong> "What does the company own and owe?"</li>
+                <li><strong>Cash Flow Statement:</strong> "Can it pay its bills?"</li>
+            </ul>
+            <p>Looking at just one is like judging a football match by only watching the striker - you miss the whole picture. A company might be profitable (good income statement) but over-leveraged (balance sheet warning) and running out of cash (cash flow crisis).</p>
+        </div>
+
+        <div class="example-box">
+            <h3>🌟 Real-World Example: Apple's Financial Strength (2024)</h3>
+            <p>Apple demonstrates integrated financial excellence across all three statements:</p>
+            <ul>
+                <li><strong>Income Statement:</strong> Net income of $94B (FY2023) - highly profitable</li>
+                <li><strong>Balance Sheet:</strong> $162B cash, manageable debt - strong financial position</li>
+                <li><strong>Cash Flow:</strong> $110B operating cash flow - excellent liquidity</li>
+            </ul>
+            <p>This trifecta lets Apple invest $30B annually in R&D, return $90B+ to shareholders via dividends and buybacks, and maintain flexibility for acquisitions. Integrated analysis shows why Apple maintains AAA-equivalent credit rating and investor confidence even in economic uncertainty.</p>
+            <div class="reference">Source: Apple Inc. 10-K FY2023 & Q4 FY2024 Reports</div>
+        </div>
+
+        <div class="question-box">
+            <h3>💡 Final Comprehensive Case Study</h3>
+            <p><strong>Company XYZ Financial Summary (2024):</strong></p>
+            <ul>
+                <li><strong>Revenue:</strong> £5M (up 40% from 2023)</li>
+                <li><strong>Net Profit:</strong> £200K (4% margin)</li>
+                <li><strong>Current Assets:</strong> £800K | Current Liabilities: £1.2M</li>
+                <li><strong>Cash from Operations:</strong> -£300K (negative)</li>
+                <li><strong>Long-term Debt:</strong> £2.5M at 8% interest</li>
+            </ul>
+            <p><strong>Analyze XYZ's financial health using all three statement perspectives. What are the key concerns? What would you recommend?</strong></p>
+            <textarea id="analysis-20" placeholder="Your comprehensive analysis (200 words)..."></textarea>
+            <button class="btn-check" onclick="showSampleAnswer(20)">Show Sample Answer</button>
+            <div class="feedback" id="feedback-20"></div>
+        </div>
+
+        <div style="margin-top: 40px; padding: 25px; background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border-radius: 12px; border-left: 4px solid #0ea5e9;">
+            <h3 style="color: #0c4a6e; margin-bottom: 15px;">🎓 Congratulations!</h3>
+            <p style="font-size: 17px; line-height: 1.8;">You've completed the Financial Statement Analysis learning module. You now understand how to read and interpret income statements, balance sheets, and cash flow statements - essential skills for business analysis, investment decisions, and strategic management.</p>
+            <p style="font-size: 17px; line-height: 1.8; margin-top: 15px;"><strong>Next Steps:</strong> Practice analyzing real company financial statements. Try comparing competitors in the same industry or tracking a company's financial performance over 3-5 years to spot trends.</p>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="navigation">
+        <button id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressBar"></div>
+        </div>
+        <button id="nextBtn" onclick="changeSlide(1)">Next →</button>
+    </div>
+</div>
+
+<script>
+    let currentSlide = 1;
+    const totalSlides = 20;
+
+    function showSlide(n) {
+        const slides = document.querySelectorAll('.slide');
+        
+        if (n > totalSlides) {
+            currentSlide = totalSlides;
+        } else if (n < 1) {
+            currentSlide = 1;
+        } else {
+            currentSlide = n;
+        }
+
+        slides.forEach(slide => slide.classList.remove('active'));
+        slides[currentSlide - 1].classList.add('active');
+
+        // Update progress bar
+        const progress = (currentSlide / totalSlides) * 100;
+        document.getElementById('progressBar').style.width = progress + '%';
+
+        // Update button states
+        document.getElementById('prevBtn').disabled = currentSlide === 1;
+        document.getElementById('nextBtn').disabled = currentSlide === totalSlides;
+
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function changeSlide(direction) {
+        showSlide(currentSlide + direction);
+    }
+
+    function checkAnswer(slideNum, selected, isCorrect) {
+        const options = document.querySelectorAll(`[data-slide="${slideNum}"] .mcq-option`);
+        const feedback = document.getElementById(`feedback-${slideNum}`);
+        
+        // Reset previous selections
+        options.forEach(opt => {
+            opt.classList.remove('selected', 'correct', 'incorrect');
+        });
+
+        // Mark selected option
+        event.target.classList.add('selected');
+        
+        if (isCorrect) {
+            event.target.classList.add('correct');
+            feedback.textContent = '✅ Correct! Well done!';
+            feedback.className = 'feedback correct show';
+        } else {
+            event.target.classList.add('incorrect');
+            feedback.textContent = '❌ Not quite. Review the explanation above and try again.';
+            feedback.className = 'feedback incorrect show';
+        }
+    }
+
+    function checkCalculation(slideNum, correctAnswer) {
+        const input = document.getElementById(`calc-${slideNum}`);
+        const feedback = document.getElementById(`feedback-${slideNum}`);
+        const userAnswer = parseFloat(input.value);
+
+        if (isNaN(userAnswer)) {
+            feedback.textContent = '⚠️ Please enter a valid number.';
+            feedback.className = 'feedback incorrect show';
+            return;
+        }
+
+        if (Math.abs(userAnswer - correctAnswer) < 1) {
+            feedback.textContent = `✅ Correct! The answer is £${correctAnswer.toLocaleString()}.`;
+            feedback.className = 'feedback correct show';
+        } else {
+            feedback.textContent = `❌ Not quite. Check your calculation. Hint: The correct answer is £${correctAnswer.toLocaleString()}.`;
+            feedback.className = 'feedback incorrect show';
+        }
+    }
+
+    function showSampleAnswer(slideNum) {
+        const feedback = document.getElementById(`feedback-${slideNum}`);
+        let sampleAnswer = '';
+
+        switch(slideNum) {
+            case 6:
+                sampleAnswer = 'Company A has much better operational efficiency with a 40% operating margin compared to Company B\'s 10%. This means Company A either charges premium prices, has lower costs, or both. Company A\'s business model generates £4 in operating profit for every £10 in revenue, while Company B only generates £1. This could indicate better pricing power, superior cost management, economies of scale, or a more favorable competitive position. Investors would likely value Company A higher due to its superior profitability and potential for higher returns on investment.';
+                break;
+            case 11:
+                sampleAnswer = 'Company X has much stronger liquidity with 60% cash, suggesting financial stability and flexibility for investments or weathering downturns. Low inventory (20%) might indicate efficient operations or a service-based business. Company Y\'s 60% inventory suggests either a manufacturing/retail business or potential inefficiency - excess inventory ties up capital and risks obsolescence. High receivables (30%) means customers owe them money, creating collection risk. Company Y faces higher risk: if customers don\'t pay or inventory doesn\'t sell, they could face cash flow problems. Company X is better positioned to handle market changes.';
+                break;
+            case 14:
+                sampleAnswer = 'Company A (£50M at 5%) uses high leverage to amplify returns. Advantages: £2.5M annual interest is manageable if profitable; debt is tax-deductible; allows major investments without diluting ownership. Risks: large debt obligation could cause distress if revenue drops; limits financial flexibility. Company B (£5M at 8%) is conservative with low leverage. Advantages: only £400K annual interest; more financial stability; easier to raise funds if needed. Risks: may have missed growth opportunities that debt could have funded; higher interest rate suggests lender perceived more risk. Company A bets on growth; Company B prioritizes safety. Neither is inherently better - depends on business stability, growth prospects, and risk tolerance.';
+                break;
+            case 19:
+                sampleAnswer = 'Financial statements show Company A is currently profitable and financially stable - a proven business model generating positive returns. However, they don\'t show future potential, competitive position, or intangible assets. Company B\'s revolutionary AI technology and top talent aren\'t captured in traditional accounting - these could be worth billions but aren\'t "assets" on the balance sheet. Current losses might reflect heavy R&D investment, typical for disruptive tech. To evaluate: for Company A, examine profit trends, market maturity, and competitive threats. For Company B, assess technology viability, market size, competitive barriers, team quality, and path to profitability. Financial statements are one input, not the whole picture. Many of today\'s most valuable companies (Amazon, Tesla) showed losses for years while building transformative businesses.';
+                break;
+            case 20:
+                sampleAnswer = 'XYZ faces serious financial stress across all dimensions. Income Statement: 4% net margin is razor-thin; 40% revenue growth is impressive but unsustainable if unprofitable. Balance Sheet: negative working capital (£400K deficit) signals immediate liquidity crisis - can\'t pay short-term bills. £2.5M debt at 8% costs £200K annually in interest - equal to entire net profit. Cash Flow: negative £300K from operations despite profit indicates the "growth at all costs" is consuming cash faster than generating it - likely due to inventory buildup, slow customer payments, or heavy upfront costs. Recommendations: (1) Immediate focus on cash collection and working capital management, (2) Negotiate extended supplier payment terms, (3) Consider slowing growth to preserve cash, (4) Refinance expensive debt if possible, (5) Potentially raise equity to strengthen balance sheet. Without intervention, XYZ risks insolvency despite revenue growth - classic case of "growing broke."';
+                break;
+        }
+
+        feedback.innerHTML = `<strong>Sample Answer:</strong><br>${sampleAnswer}`;
+        feedback.className = 'feedback correct show';
+    }
+
+    // Initialize
+    showSlide(1);
+
+    // Keyboard navigation
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'ArrowLeft') {
+            changeSlide(-1);
+        } else if (event.key === 'ArrowRight') {
+            changeSlide(1);
+        }
+    });
+</script>
+```
+
+</body>
+</html>
